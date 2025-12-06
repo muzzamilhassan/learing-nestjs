@@ -1,8 +1,14 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoginDto, RegisterDto } from 'src/auth/dto/auth.dto';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -28,8 +34,11 @@ export class UserService {
   }
 
   async loginUser(loginDto: LoginDto) {
-    const user = await this.userModel.findOne({ email: loginDto.email });
-    if (!user) throw new Error('User not found');
+    const user = await this.userModel.findOne({ email: loginDto.email }).exec();
+    if (!user) throw new NotFoundException('User not found');
+
+    const isMatch = await bcrypt.compare(loginDto.password, user.password);
+    if (!isMatch) throw new UnauthorizedException('Invalid credentials');
     return user;
   }
 }

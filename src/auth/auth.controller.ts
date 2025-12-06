@@ -22,6 +22,16 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
-    await this.authService.loginUser(loginDto);
+    const loginUser = await this.authService.loginUser(loginDto);
+    const payload = {
+      sub: loginUser._id,
+      email: loginUser.email,
+    };
+    const token = this.jwtService.sign(payload);
+    return {
+      message: 'Login successful',
+      user: loginUser,
+      access_token: token,
+    };
   }
 }
