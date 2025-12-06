@@ -1,12 +1,22 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from './auth.guard';
+import { UserService } from 'src/user/user.service';
 @Controller('auth') // auth will be the route prefix
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
+    private readonly userService: UserService,
   ) {}
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
@@ -33,5 +43,15 @@ export class AuthController {
       user: loginUser,
       access_token: token,
     };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async profile(@Request() req) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = req.user?.sub as string;
+    console.log('hellow', userId);
+    const user = await this.userService.getUserById(userId);
+    return user;
   }
 }

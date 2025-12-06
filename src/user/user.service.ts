@@ -41,4 +41,11 @@ export class UserService {
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
     return user;
   }
+
+  async getUserById(id: string) {
+    return await this.userModel
+      .findById({ _id: id })
+      .select('-password')
+      .exec();
+  }
 }
