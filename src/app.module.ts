@@ -10,8 +10,8 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     AuthModule,
     UserModule,
-    MongooseModule.forRoot(process.env.MONGO_URI!, { dbName: 'nest_lms' }),
     ConfigModule.forRoot(), // Load .env file forRoot({ local.env: '.env' })
+    MongooseModule.forRoot(process.env.MONGO_URI as string),
   ],
   controllers: [AppController],
   providers: [AppService],
