@@ -17,12 +17,12 @@ export class CourseService {
     });
   }
 
-  findAll() {
-    return `This action returns all course`;
+  async findAll() {
+    return await this.courseModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: string) {
+    return await this.courseModel.findById(id).exec();
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {
@@ -30,7 +30,7 @@ export class CourseService {
     return `This action updates a #${id} course`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+  async remove(id: string) {
+    return this.courseModel.findByIdAndDelete(id).exec();
   }
 }

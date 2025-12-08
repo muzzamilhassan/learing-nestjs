@@ -34,7 +34,7 @@ export class CourseController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.courseService.findOne(+id);
+    return this.courseService.findOne(id);
   }
 
   @Patch(':id')
@@ -43,7 +43,8 @@ export class CourseController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.courseService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const removeUser = await this.courseService.remove(id);
+    return { message: 'Course deleted successfully', user: removeUser };
   }
 }
