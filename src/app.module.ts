@@ -12,7 +12,8 @@ import { CourseModule } from './course/course.module';
     AuthModule,
     UserModule,
     ConfigModule.forRoot(), // Load .env file forRoot({ local.env: '.env' })
-    MongooseModule.forRoot(process.env.MONGO_URI as string), CourseModule,
+    MongooseModule.forRoot(process.env.MONGO_URI as string),
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

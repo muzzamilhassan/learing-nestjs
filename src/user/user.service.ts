@@ -23,6 +23,7 @@ export class UserService {
         username: registerDto.username,
         email: registerDto.email,
         password: registerDto.password,
+        Role: registerDto.Role,
       });
     } catch (error: unknown) {
       const e = error as { code: number };
